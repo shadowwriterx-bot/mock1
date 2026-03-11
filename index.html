@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Test - O'quvchi</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 10px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; }
+        .section-title { background: #e1f5fe; padding: 10px; border-radius: 8px; font-weight: bold; margin: 20px 0; text-align: center; color: #0277bd; }
+        .q-box { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .options { display: flex; justify-content: space-between; margin-top: 10px; gap: 5px; }
+        .opt { flex: 1; text-align: center; }
+        .opt input { display: none; }
+        .opt label { display: block; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fafafa; }
+        .opt input:checked + label { background: #0088cc; color: white; border-color: #0088cc; }
+        
+        /* Matematik panel dizayni */
+        .math-toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin: 5px 0; background: #f9f9f9; padding: 5px; border-radius: 5px; }
+        .math-btn { flex: 1; min-width: 40px; padding: 8px; background: white; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .math-btn:active { background: #e0e0e0; }
+        
+        input[type="text"] { width: 95%; padding: 12px; border: 2px solid #0088cc; border-radius: 8px; outline: none; font-size: 16px; }
+        button#send { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align:center; color:#0088cc">Mock Test</h2>
+        <div class="section-title">I-QISM: TEST (1-35)</div>
+        <div id="test-part"></div>
+        <div class="section-title">II-QISM: YOZMA (36-55)</div>
+        <div id="written-part"></div>
+        <button id="send" onclick="send()">Javoblarni Yuborish</button>
+    </div>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        const testD = document.getElementById('test-part');
+        const writD = document.getElementById('written-part');
+
+        for(let i=1; i<=35; i++){
+            let opts = "";
+            ['A','B','C','D','E'].forEach(o => {
+                opts += `<div class="opt"><input type="radio" name="q${i}" id="q${i}${o}" value="${o}"><label for="q${i}${o}">${o}</label></div>`;
+            });
+            testD.innerHTML += `<div class="q-box"><b>${i}. Savol:</b><div class="options">${opts}</div></div>`;
+        }
+
+        function ins(i, v) { 
+            const el = document.getElementById('w'+i);
+            el.value += v;
+            el.focus();
+        }
+
+        for(let i=36; i<=55; i++){
+            writD.innerHTML += `<div class="q-box"><b>${i}. Savol:</b><br>
+                <div class="math-toolbar">
+                    <button class="math-btn" onclick="ins(${i},'√')">√</button>
+                    <button class="math-btn" onclick="ins(${i},'/')">/</button>
+                    <button class="math-btn" onclick="ins(${i},'^')">^</button>
+                    <button class="math-btn" onclick="ins(${i},'π')">π</button>
+                    <button class="math-btn" onclick="ins(${i},'sin(')">sin</button>
+                    <button class="math-btn" onclick="ins(${i},'cos(')">cos</button>
+                </div>
+                <input type="text" id="w${i}" placeholder="Javobni kiriting..."></div>`;
+        }
+
+        function send() {
+            let t = ""; let w = [];
+            for(let i=1; i<=35; i++){
+                let s = document.querySelector(`input[name="q${i}"]:checked`);
+                t += s ? s.value : "X";
+            }
+            for(let i=36; i<=55; i++){ w.push(document.getElementById('w'+i).value.trim() || "0"); }
+            tg.sendData(t + " " + w.join(","));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
