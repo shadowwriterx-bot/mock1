@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mock Test</title>
+    <title>Mock Test - O'quvchi</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 10px; margin: 0; }
@@ -15,8 +15,8 @@
         .opt input { display: none; }
         .opt label { display: block; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fafafa; }
         .opt input:checked + label { background: #0088cc; color: white; border-color: #0088cc; }
-        .math-toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
-        .math-btn { padding: 6px 12px; background: #fff; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .math-toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+        .math-btn { padding: 6px 10px; background: #f8f9fa; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
         .written-input { width: 92%; padding: 12px; border: 2px solid #0088cc; border-radius: 8px; font-size: 16px; margin-top: 5px; }
         button#send { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
     </style>
@@ -46,12 +46,28 @@
         function ins(id, v) { const el = document.getElementById(id); el.value += v; el.focus(); }
 
         for(let i=36; i<=45; i++){
-            writD.innerHTML += `<div class="q-box"><b>${i}-savol:</b><br>
+            writD.innerHTML += `
+            <div class="q-box">
+                <b>${i}-savol:</b><br>
+                <b>A qism uchun:</b>
                 <div class="math-toolbar">
-                    <button class="math-btn" onclick="ins('w${i}a','√')">√</button><button class="math-btn" onclick="ins('w${i}a','^')">^</button><button class="math-btn" onclick="ins('w${i}a','/')">/</button>
+                    <button class="math-btn" onclick="ins('w${i}a','√')">√</button>
+                    <button class="math-btn" onclick="ins('w${i}a','^')">^</button>
+                    <button class="math-btn" onclick="ins('w${i}a','/')">/</button>
+                    <button class="math-btn" onclick="ins('w${i}a','π')">π</button>
                 </div>
-                <b>A)</b> <input type="text" id="w${i}a" class="written-input" placeholder="Javob..."><br>
-                <b>B)</b> <input type="text" id="w${i}b" class="written-input" placeholder="Javob..."></div>`;
+                <input type="text" id="w${i}a" class="written-input" placeholder="A javobi...">
+                
+                <br><br>
+                <b>B qism uchun:</b>
+                <div class="math-toolbar">
+                    <button class="math-btn" onclick="ins('w${i}b','√')">√</button>
+                    <button class="math-btn" onclick="ins('w${i}b','^')">^</button>
+                    <button class="math-btn" onclick="ins('w${i}b','/')">/</button>
+                    <button class="math-btn" onclick="ins('w${i}b','π')">π</button>
+                </div>
+                <input type="text" id="w${i}b" class="written-input" placeholder="B javobi...">
+            </div>`;
         }
 
         function send() {
