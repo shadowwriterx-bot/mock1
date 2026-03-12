@@ -9,16 +9,17 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 10px; margin: 0; }
         .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .section-title { background: #e1f5fe; padding: 12px; border-radius: 8px; font-weight: bold; margin: 25px 0 15px; text-align: center; color: #0277bd; }
-        .q-box { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .q-box { border-bottom: 2px solid #f0f0f0; padding: 20px 0; }
         .options { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
         .opt { flex: 1; min-width: 45px; text-align: center; }
         .opt input { display: none; }
         .opt label { display: block; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fafafa; }
         .opt input:checked + label { background: #0088cc; color: white; border-color: #0088cc; }
         .math-toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
-        .math-btn { padding: 6px 10px; background: #f8f9fa; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .written-input { width: 92%; padding: 12px; border: 2px solid #0088cc; border-radius: 8px; font-size: 16px; margin-top: 5px; }
-        button#send { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
+        .math-btn { padding: 8px 12px; background: #eee; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .math-btn:active { background: #ddd; }
+        .written-input { width: 92%; padding: 12px; border: 2px solid #0088cc; border-radius: 8px; font-size: 16px; margin-top: 5px; background: #fff; }
+        button#send { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 35px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -43,30 +44,38 @@
             testD.innerHTML += `<div class="q-box"><b>${i}. Savol</b><div class="options">${opts}</div></div>`;
         }
 
-        function ins(id, v) { const el = document.getElementById(id); el.value += v; el.focus(); }
+        // Belgini to'g'ri katakka kiritish funksiyasi
+        function ins(id, v) { 
+            const el = document.getElementById(id); 
+            el.value += v; 
+            el.focus(); 
+        }
 
         for(let i=36; i<=45; i++){
             writD.innerHTML += `
             <div class="q-box">
-                <b>${i}-savol:</b><br>
-                <b>A qism uchun:</b>
+                <b style="color:#d32f2f">${i}-savol yozma:</b><br><br>
+                
+                <b>A qismi:</b>
                 <div class="math-toolbar">
                     <button class="math-btn" onclick="ins('w${i}a','√')">√</button>
                     <button class="math-btn" onclick="ins('w${i}a','^')">^</button>
                     <button class="math-btn" onclick="ins('w${i}a','/')">/</button>
-                    <button class="math-btn" onclick="ins('w${i}a','π')">π</button>
+                    <button class="math-btn" onclick="ins('w${i}a','sin(')">sin</button>
+                    <button class="math-btn" onclick="ins('w${i}a','cos(')">cos</button>
                 </div>
-                <input type="text" id="w${i}a" class="written-input" placeholder="A javobi...">
+                <input type="text" id="w${i}a" class="written-input" placeholder="A variant javobi...">
                 
                 <br><br>
-                <b>B qism uchun:</b>
+                <b>B qismi:</b>
                 <div class="math-toolbar">
                     <button class="math-btn" onclick="ins('w${i}b','√')">√</button>
                     <button class="math-btn" onclick="ins('w${i}b','^')">^</button>
                     <button class="math-btn" onclick="ins('w${i}b','/')">/</button>
-                    <button class="math-btn" onclick="ins('w${i}b','π')">π</button>
+                    <button class="math-btn" onclick="ins('w${i}b','sin(')">sin</button>
+                    <button class="math-btn" onclick="ins('w${i}b','cos(')">cos</button>
                 </div>
-                <input type="text" id="w${i}b" class="written-input" placeholder="B javobi...">
+                <input type="text" id="w${i}b" class="written-input" placeholder="B variant javobi...">
             </div>`;
         }
 
@@ -77,10 +86,8 @@
                 t += s ? s.value : "X";
             }
             for(let i=36; i<=45; i++){
-                let vA = document.getElementById('w'+i+'a').value.trim();
-                let vB = document.getElementById('w'+i+'b').value.trim();
-                w.push(vA !== "" ? vA : "BO'SH");
-                w.push(vB !== "" ? vB : "BO'SH");
+                w.push(document.getElementById('w'+i+'a').value.trim() || "BO'SH");
+                w.push(document.getElementById('w'+i+'b').value.trim() || "BO'SH");
             }
             tg.sendData(t + " " + w.join(","));
             tg.close();
